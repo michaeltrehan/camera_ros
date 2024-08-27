@@ -666,11 +666,14 @@ CameraNode::process(libcamera::Request *const request)
     request->reuse(libcamera::Request::ReuseBuffers);
 
     // update parameters
+    RCLCPP_INFO_STREAM(get_logger(), "Acquiring parameters lock");
     parameters_lock.lock();
     for (const auto &[id, value] : parameters)
       request->controls().set(id, value);
     parameters.clear();
     parameters_lock.unlock();
+    RCLCPP_INFO_STREAM(get_logger(), "Releasing parameters lock");
+
 
     camera->queueRequest(request);
   }
@@ -699,7 +702,7 @@ CameraNode::onParameterChange(const std::vector<rclcpp::Parameter> &parameters)
   result.successful = true;
 
   for (const rclcpp::Parameter &parameter : parameters) {
-    RCLCPP_DEBUG_STREAM(get_logger(), "setting " << parameter.get_type_name() << " parameter "
+    RCLCPP_INFO_STREAM(get_logger(), "setting " << parameter.get_type_name() << " parameter "
                                                  << parameter.get_name() << " to "
                                                  << parameter.value_to_string());
 
@@ -738,9 +741,12 @@ CameraNode::onParameterChange(const std::vector<rclcpp::Parameter> &parameters)
           return result;
         }
 
+        RCLCPP_INFO_STREAM(get_logger(), "REQUESTs --------- Acquiring lock");
         parameters_lock.lock();
         this->parameters[parameter_ids.at(parameter.get_name())->id()] = value;
         parameters_lock.unlock();
+        RCLCPP_INFO_STREAM(get_logger(), "REQUESTs --------- Unlocked");
+
 
         parameters_full[parameter.get_name()] = parameter.get_parameter_value();
       }
