@@ -682,6 +682,7 @@ CameraNode::process(libcamera::Request *const request)
 rcl_interfaces::msg::SetParametersResult
 CameraNode::onParameterChange(const std::vector<rclcpp::Parameter> &parameters)
 {
+  RCLCPP_INFO_STREAM(get_logger(), "RECEIVED PARAMETER TO SET");
   rcl_interfaces::msg::SetParametersResult result;
 
   // check target parameter state (current and new parameters)
