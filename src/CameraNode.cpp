@@ -437,6 +437,13 @@ CameraNode::declareParameters()
   // dynamic camera configuration
   ParameterMap parameters_init;
   for (const auto &[id, info] : camera->controls()) {
+    // MICHAEL CUSTOM
+    if (id == 2003)
+    {
+      // 2003: ScalerCrops
+      continue;
+    }
+
     // store control id with name
     parameter_ids[id->name()] = id;
 
