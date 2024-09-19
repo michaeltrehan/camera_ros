@@ -438,9 +438,9 @@ CameraNode::declareParameters()
   ParameterMap parameters_init;
   for (const auto &[id, info] : camera->controls()) {
     // MICHAEL CUSTOM
-    if (id == 2003)
+    if (id->name() == "ScalerCrops")
     {
-      // 2003: ScalerCrops
+      RCLCPP_WARN_STREAM(get_logger(), "MICHAEL CUSTOM: unsupported control '" << id->name() << "'");
       continue;
     }
 
